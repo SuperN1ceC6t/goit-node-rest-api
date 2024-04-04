@@ -17,12 +17,16 @@ export const getAllContacts = async (req, res) => {
 };
 
 export const getOneContact = async (req, res) => {
-  const { id } = req.params;
-  const contact = await getContactById(id);
-  if (contact) {
-    res.status(200).json(contact);
-  } else {
-    throw HttpError(404, "Not found");
+  try {
+    const { id } = req.params;
+    const contact = await getContactById(id);
+    if (contact) {
+      res.status(200).json(contact);
+    } else {
+      throw HttpError(404, "Not found");
+    }
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
@@ -61,6 +65,10 @@ export const createContact = async (req, res) => {
 export const updateContact = async (req, res) => {
   const { id } = req.params;
   try {
+    if (Object.keys(req.body).length === 0) {
+      throw new Error("Body must have at least one field");
+    }
+
     await updateContactSchema.validateAsync(req.body);
 
     const updatedContact = await updateContactInfo(id, req.body);
