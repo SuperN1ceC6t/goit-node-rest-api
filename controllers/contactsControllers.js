@@ -62,13 +62,14 @@ export const updateContact = async (req, res) => {
   const { id } = req.params;
   try {
     await updateContactSchema.validateAsync(req.body);
+
+    const updatedContact = await updateContactInfo(id, req.body);
+    if (updatedContact) {
+      res.status(200).json(updatedContact);
+    } else {
+      throw HttpError(404, "Not found");
+    }
   } catch (error) {
     return res.status(400).json({ message: error.message });
-  }
-  const updatedContact = await updateContactInfo(id, req.body);
-  if (updatedContact) {
-    res.status(200).json(updatedContact);
-  } else {
-    throw HttpError(404, "Not found");
   }
 };
