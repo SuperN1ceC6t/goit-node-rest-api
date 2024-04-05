@@ -26,17 +26,21 @@ export const getOneContact = async (req, res) => {
       throw HttpError(404, "Not found");
     }
   } catch (error) {
-    res.status(error.statusCode || 500).json({ message: error.message });
+    res.status(404).json({ message: error.message });
   }
 };
 
 export const deleteContact = async (req, res) => {
-  const { id } = req.params;
-  const deletedContact = await removeContact(id);
-  if (deletedContact) {
-    res.status(200).json(deletedContact);
-  } else {
-    throw HttpError(404, "Not found");
+  try {
+    const { id } = req.params;
+    const deletedContact = await removeContact(id);
+    if (deletedContact) {
+      res.status(200).json(deletedContact);
+    } else {
+      throw HttpError(404, "Not found");
+    }
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };
 
@@ -78,6 +82,6 @@ export const updateContact = async (req, res) => {
       throw HttpError(404, "Not found");
     }
   } catch (error) {
-    return res.status(400).json({ message: error.message });
+    return res.status(404).json({ message: error.message });
   }
 };
