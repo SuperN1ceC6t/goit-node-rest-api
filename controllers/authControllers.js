@@ -3,6 +3,9 @@ import jwt from "jsonwebtoken";
 import authServices from "../services/authServices.js";
 import ctrlWrapper from "../decorators/ctrlWrapper.js";
 import HttpError from "../helpers/HttpError.js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const { JWT_SECRET } = process.env;
 
